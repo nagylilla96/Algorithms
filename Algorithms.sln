@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Quicksort", "Quicksort\Quicksort.vcxproj", "{09748BB9-A6D2-403A-9CF9-87A6C4750406}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mergesort", "Mergesort\Mergesort.vcxproj", "{9AA64DAE-66ED-461D-833D-B7000E0600B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{09748BB9-A6D2-403A-9CF9-87A6C4750406}.Release|x64.Build.0 = Release|x64
 		{09748BB9-A6D2-403A-9CF9-87A6C4750406}.Release|x86.ActiveCfg = Release|Win32
 		{09748BB9-A6D2-403A-9CF9-87A6C4750406}.Release|x86.Build.0 = Release|Win32
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Debug|x64.ActiveCfg = Debug|x64
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Debug|x64.Build.0 = Debug|x64
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Debug|x86.ActiveCfg = Debug|Win32
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Debug|x86.Build.0 = Debug|Win32
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Release|x64.ActiveCfg = Release|x64
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Release|x64.Build.0 = Release|x64
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Release|x86.ActiveCfg = Release|Win32
+		{9AA64DAE-66ED-461D-833D-B7000E0600B1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
