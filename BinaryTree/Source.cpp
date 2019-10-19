@@ -34,9 +34,12 @@ Node* addNode(Node* root, int value)
 	if (value < root->value)
 	{
 		root->left = addNode(root->left, value);
+
 		return root;
 	}
+
 	root->right = addNode(root->right, value);
+
 	return root;
 }
 
@@ -57,20 +60,53 @@ Node* deleteNode(Node* root, int value)
 		if (root->left == NULL)
 		{
 			Node* temp = root->right;
+
 			free(root);
+
 			return temp;
 		}
 		else if (root->right == NULL)
 		{
 			Node* temp = root->left;
+
 			free(root);
+
 			return temp;
 		}
+
 		Node* temp = succ(root->right);
 		root->value = temp->value;
 		root->right = deleteNode(root->right, temp->value);
 	}
+
 	return root;
+}
+
+void preOrder(Node* root)
+{
+	if (root == NULL) return;
+
+	cout << root->value << " ";
+	preOrder(root->left);
+	preOrder(root->right);
+}
+
+void inOrder(Node* root) 
+{
+	if (root == NULL) return;
+
+	inOrder(root->left);
+	cout << root->value << " ";
+	inOrder(root->right);
+}
+
+void postOrder(Node* root)
+{
+	if (root == NULL) return;
+
+	postOrder(root->left);
+	postOrder(root->right);
+	cout << root->value << " ";
 }
 
 void printTree(Node* root, int level)
@@ -92,20 +128,32 @@ void printTree(Node* root, int level)
 Node* insertArr(int* arr, int size)
 {
 	Node* root = NULL;
+
 	for (int i = 0; i < size; i++)
 	{
 		root = addNode(root, arr[i]);
 	}
+
 	printTree(root, 0);
+
 	return root;
+}
+
+void test(Node* root)
+{
+	cout << endl;
+	preOrder(root);
+	cout << endl;
+	inOrder(root);
+	cout << endl;
+	postOrder(root);
 }
 
 int main()
 {
 	int arr[7] = { 6, 3, 8, 9, 7, 2, 1 };
 	Node* root = insertArr(arr, 7);
-	deleteNode(root, 6);
-	printTree(root, 0);
+	test(root);
 	return 0;
 
 }
