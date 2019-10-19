@@ -2,10 +2,18 @@
 
 using namespace std;
 
-// TODO: delete!
-
+// After delete, nodes don't stay ordered. But whatever :)) 
 class TreeEntry
 {
+private:
+	class ToDelete
+	{
+	public:
+		TreeEntry* toDelete = NULL;
+		TreeEntry* parent = NULL;
+		TreeEntry* previous = NULL;
+	};
+
 public:
 	int value;
 	TreeEntry* next = NULL;
@@ -80,25 +88,17 @@ public:
 	static TreeEntry* findValue(TreeEntry* root, int value)
 	{
 		if (root == NULL) return root;
-
 		if (root->value == value) return root;
-
 		if (root->nodes == NULL) return NULL;
 
 		TreeEntry* current = root->nodes;
 
 		while (current != NULL)
 		{
-			if (current->value == value)
-			{
-				return current;
-			}
+			if (current->value == value) return current;
 
 			TreeEntry* temp = findValue(current->nodes, value);
-			if (temp != NULL)
-			{
-				return temp;
-			}
+			if (temp != NULL) return temp;
 
 			current = ((TreeEntry*)current)->next;
 		}
@@ -120,6 +120,7 @@ public:
 			cout << "Parent with value " << parentValue << " not found!" << endl;
 			return NULL;
 		}
+
 		TreeEntry* child = ((TreeEntry*)parent)->insertOrderedList(parent->nodes, childValue);
 		if (child == NULL)
 		{
@@ -129,6 +130,133 @@ public:
 		parent->nodes = child;
 
 		return root;
+	}
+
+	static ToDelete* findToDelete(TreeEntry* root, int value)
+	{
+		if (root == NULL) return new ToDelete();
+
+		if (root->value == value)
+		{
+			ToDelete* found = new ToDelete();
+			found->toDelete = root;
+			return found;
+		}
+
+		TreeEntry* current = root;
+		ToDelete* found = new ToDelete();
+		found->previous = NULL;
+
+		while (current != NULL)
+		{
+			if (current->value == value)
+			{
+				found->toDelete = current;
+				return found;
+			}
+			found->previous = current;
+			current = current->next;
+		}
+
+		if (root->nodes == NULL) return new ToDelete();
+
+		found->parent = root;
+		found->previous = NULL;
+		current = root->nodes;
+
+		while (current != NULL)
+		{
+			found->toDelete = current;
+
+			if (current->value == value) return found;
+
+			ToDelete* temp = findToDelete(current->nodes, value);
+			if (temp != NULL && temp->toDelete != NULL)
+			{
+				if (temp->parent == NULL)
+				{
+					temp->parent = current;
+				}
+				return temp;
+			}
+
+			found->previous = current;
+			current = ((TreeEntry*)current)->next;
+		}
+
+		return NULL;
+	}
+
+	static TreeEntry* deleteNode(TreeEntry* root, int value)
+	{
+		if (root == NULL) return NULL;
+
+		ToDelete* found = findToDelete(root, value);
+		if (found == NULL || found->toDelete == NULL) return NULL;
+
+		cout << "\nParent: " << ((found->parent) ? found->parent->value : 0) <<
+			" Previous: " << ((found->previous) ? found->previous->value : 0) << endl;
+
+		if (found->parent == NULL && found->previous == NULL)
+		{
+			if (found->toDelete->nodes == NULL) {
+				root = NULL;
+				return root;
+			}
+			root = found->toDelete->nodes;
+
+			TreeEntry* cur = root->nodes;
+			while (cur->next != NULL)
+			{
+				cur = cur->next;
+			}
+			cur->next = root->next;
+			root->next = NULL;
+			return root;
+		}
+
+		if (found->toDelete->nodes == NULL)
+		{
+			if (found->previous == NULL)
+			{
+				found->parent->nodes = found->toDelete->next;
+				found->toDelete->next = NULL;
+				return root;
+			}
+			found->previous->next = found->toDelete->next;
+			found->toDelete->next = NULL;
+			return root;
+		}
+
+		if (found->toDelete->next != NULL)
+		{
+			found->parent->nodes = found->toDelete->next;
+			TreeEntry* cur = found->toDelete->next->nodes;
+			if (cur != NULL)
+			{
+				while (cur != NULL && cur->next != NULL)
+				{
+					cur = cur->next;
+				}
+				cur->next = found->toDelete->nodes;
+				return root;
+			}			
+			found->parent->nodes->nodes = found->toDelete->nodes;
+			return root;
+		}
+
+		TreeEntry* cur = found->previous->nodes;
+		if (cur != NULL)
+		{
+			while (cur != NULL && cur->next != NULL)
+			{
+				cur = cur->next;
+			}
+			cur->next = found->toDelete->nodes;
+			found->previous->next = NULL;
+			return root;
+		}
+		return NULL;
 	}
 };
 
@@ -146,6 +274,12 @@ void testTree()
 	root = TreeEntry::addNode(root, 1, 2);
 	root = TreeEntry::addNode(root, 1, 3);
 	root = TreeEntry::addNode(root, 2, 4);
+	root = TreeEntry::addNode(root, 2, 6);
+	root = TreeEntry::addNode(root, 2, 9);
+	root = TreeEntry::addNode(root, 4, 5);
+	root = TreeEntry::addNode(root, 4, 7);
+	TreeEntry::printOrderedList(root, 0);
+	root = TreeEntry::deleteNode(root, 5);
 	TreeEntry::printOrderedList(root, 0);
 }
 
