@@ -62,6 +62,7 @@ public:
 	static void printOrderedList(TreeEntry* first, int level)
 	{
 		if (first == NULL) return;
+
 		TreeEntry* current = first;
 		while (current != NULL)
 		{
@@ -199,10 +200,13 @@ public:
 
 		if (found->parent == NULL && found->previous == NULL)
 		{
-			if (found->toDelete->nodes == NULL) {
+			if (found->toDelete->nodes == NULL) 
+			{
 				root = NULL;
+
 				return root;
 			}
+
 			root = found->toDelete->nodes;
 
 			TreeEntry* cur = root->nodes;
@@ -210,8 +214,10 @@ public:
 			{
 				cur = cur->next;
 			}
+
 			cur->next = root->next;
 			root->next = NULL;
+
 			return root;
 		}
 
@@ -221,16 +227,20 @@ public:
 			{
 				found->parent->nodes = found->toDelete->next;
 				found->toDelete->next = NULL;
+
 				return root;
 			}
+
 			found->previous->next = found->toDelete->next;
 			found->toDelete->next = NULL;
+
 			return root;
 		}
 
 		if (found->toDelete->next != NULL)
 		{
 			found->parent->nodes = found->toDelete->next;
+
 			TreeEntry* cur = found->toDelete->next->nodes;
 			if (cur != NULL)
 			{
@@ -239,9 +249,12 @@ public:
 					cur = cur->next;
 				}
 				cur->next = found->toDelete->nodes;
+
 				return root;
 			}			
+
 			found->parent->nodes->nodes = found->toDelete->nodes;
+
 			return root;
 		}
 
@@ -252,10 +265,13 @@ public:
 			{
 				cur = cur->next;
 			}
+
 			cur->next = found->toDelete->nodes;
 			found->previous->next = NULL;
+
 			return root;
 		}
+
 		return NULL;
 	}
 };
