@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinaryTree", "BinaryTree\Bi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "N-aryTree", "N-aryTree\N-aryTree.vcxproj", "{15DBB640-CA96-4C41-A20E-49F7875D6B30}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Trie", "Trie\Trie.vcxproj", "{9A4554A4-5C1C-4D73-8ADC-0824D8590285}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{15DBB640-CA96-4C41-A20E-49F7875D6B30}.Release|x64.Build.0 = Release|x64
 		{15DBB640-CA96-4C41-A20E-49F7875D6B30}.Release|x86.ActiveCfg = Release|Win32
 		{15DBB640-CA96-4C41-A20E-49F7875D6B30}.Release|x86.Build.0 = Release|Win32
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Debug|x64.ActiveCfg = Debug|x64
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Debug|x64.Build.0 = Debug|x64
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Debug|x86.ActiveCfg = Debug|Win32
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Debug|x86.Build.0 = Debug|Win32
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Release|x64.ActiveCfg = Release|x64
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Release|x64.Build.0 = Release|x64
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Release|x86.ActiveCfg = Release|Win32
+		{9A4554A4-5C1C-4D73-8ADC-0824D8590285}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
