@@ -41,13 +41,18 @@ vector<vector<int>> GraphNode::readAdjacencyList()
 GRAPH GraphNode::graphFromAdjList(vector<vector<int>> adjList)
 {
 	GRAPH graph;
+	int size = adjList.size();
 
-	for (unsigned int i = 0; i < adjList.size(); i++)
+	for (unsigned int i = 0; i < size; i++)
 	{
 		graph.push_back(new GraphNode(i));
+	}
+
+	for (unsigned int i = 0; i < size; i++)
+	{
 		for (auto el : adjList[i])
 		{
-			graph[i]->nodes.push_back(new GraphNode(el));
+			graph[i]->nodes.push_back(graph.at(el));
 		}
 	}
 
@@ -103,13 +108,16 @@ GRAPH GraphNode::graphFromMatrix(int** matrix, int size)
 	for (int i = 0; i < size; i++)
 	{
 		graph.push_back(new GraphNode(i));
+	}
+
+	for (int i = 0; i < size; i++)
+	{
 		for (int j = 0; j < size; j++)
 		{
 			if (matrix[i][j] == 1)
 			{
-				graph[i]->nodes.push_back(new GraphNode(j));
+				graph[i]->nodes.push_back(graph.at(j));
 			}
-
 		}
 	}
 
@@ -140,24 +148,36 @@ vector<pair<int, int>> GraphNode::readEdges()
 	return edges;
 }
 
+int getMax(vector<pair<int, int>> edges)
+{
+	int max = 0;
+
+	for (auto p : edges)
+	{
+		if (p.first > max) max = p.first;
+		if (p.second > max) max = p.second;
+	}
+	
+	return max;
+}
+
 GRAPH GraphNode::graphFromEdges(vector<pair<int, int>> edges)
 {
 	GRAPH graph;
+	int size = getMax(edges);
+
+	cout << "Max = " << size << endl;
+
+	for (int i = 0; i <= size; i++)
+	{
+		graph.push_back(new GraphNode(i));
+	}
 
 	for (auto p : edges)
 	{
 		int i = p.first;
-		GraphNode* node;
-		try
-		{
-			node = graph.at(i);
-		}
-		catch (exception& e)
-		{
-			node = new GraphNode(i);
-			graph.push_back(node);
-		}
-		node->nodes.push_back(new GraphNode(p.second));
+		GraphNode* node = graph.at(i);
+		node->nodes.push_back(graph.at(p.second));
 	}
 
 	return graph;
@@ -227,12 +247,13 @@ void testEdges(GraphNode graph)
 
 void testBFS(GraphNode graph)
 {
-	vector<pair<int, int>> edges = graph.readEdges();
-	GRAPH edgeGraph = graph.graphFromEdges(edges);
-	cout << "Graph from edges: " << endl;
-	graph.printGraph(edgeGraph);
+	vector<vector<int>> adjList = graph.readAdjacencyList();
+	GRAPH adjGraph = graph.graphFromAdjList(adjList);
+	cout << "Graph from adjacency list: " << endl;
+	graph.printGraph(adjGraph);
+	cout << endl;
 	cout << "\nGraph from BFS: " << endl;
-	BFS(edgeGraph);
+	BFS(adjGraph);
 }
 
 void test()
