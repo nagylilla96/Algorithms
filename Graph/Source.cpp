@@ -1,3 +1,4 @@
+#include <queue>
 #include "Header.h"
 
 void GraphNode::printAdjacencyList(vector<vector<int>> adjList)
@@ -175,6 +176,28 @@ void GraphNode::printGraph(GRAPH graph)
 	}
 }
 
+void BFS(GRAPH graph)
+{
+	queue<GraphNode*> Q;
+	graph[0]->marked = true;
+	Q.push(graph[0]);
+
+	while (!Q.empty()) 
+	{
+		GraphNode* node = Q.front();
+		Q.pop();
+		cout << node->value << " ";
+		for (const auto &n : node->nodes)
+		{
+			if (!n->marked)
+			{
+				n->marked = true;
+				Q.push(n);
+			}
+		}
+	}
+}
+
 void testAdjacencyList(GraphNode graph)
 {
 	vector<vector<int>> adjList = graph.readAdjacencyList();
@@ -202,13 +225,21 @@ void testEdges(GraphNode graph)
 	graph.printGraph(edgeGraph);
 }
 
+void testBFS(GraphNode graph)
+{
+	vector<pair<int, int>> edges = graph.readEdges();
+	GRAPH edgeGraph = graph.graphFromEdges(edges);
+	cout << "Graph from edges: " << endl;
+	graph.printGraph(edgeGraph);
+	cout << "\nGraph from BFS: " << endl;
+	BFS(edgeGraph);
+}
+
 void test()
 {
 	GraphNode graph;
 
-	testAdjacencyList(graph);
-	testMatrix(graph);
-	testEdges(graph);
+	testBFS(graph);
 }
 
 int main()

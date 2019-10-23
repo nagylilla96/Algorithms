@@ -15,6 +15,7 @@ class GraphNode
 {
 public:
 	int value;
+	bool marked = false;
 	vector<GraphNode*> nodes;
 
 	GraphNode()
