@@ -24,4 +24,9 @@
     <Text Include="matrix.txt" />
     <Text Include="edges.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
