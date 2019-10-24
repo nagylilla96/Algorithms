@@ -218,6 +218,19 @@ void BFS(GRAPH graph)
 	}
 }
 
+void DFS(GraphNode* current)
+{
+	if (current == NULL) return;
+	if (current->marked) return;
+	current->marked = true;
+	cout << current->value << " ";
+
+	for (const auto& node : current->nodes)
+	{
+		DFS(node);
+	}
+}
+
 void testAdjacencyList(GraphNode graph)
 {
 	vector<vector<int>> adjList = graph.readAdjacencyList();
@@ -256,11 +269,22 @@ void testBFS(GraphNode graph)
 	BFS(adjGraph);
 }
 
+void testDFS(GraphNode graph)
+{
+	vector<vector<int>> adjList = graph.readAdjacencyList();
+	GRAPH adjGraph = graph.graphFromAdjList(adjList);
+	cout << "Graph from adjacency list: " << endl;
+	graph.printGraph(adjGraph);
+	cout << endl;
+	cout << "\nGraph from DFS: " << endl;
+	DFS(adjGraph[0]);
+}
+
 void test()
 {
 	GraphNode graph;
 
-	testBFS(graph);
+	testDFS(graph);
 }
 
 int main()
