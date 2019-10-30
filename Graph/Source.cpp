@@ -1,4 +1,5 @@
 #include <queue>
+#include <stack>
 #include "Header.h"
 
 void GraphNode::printAdjacencyList(vector<vector<int>> adjList)
@@ -114,7 +115,7 @@ GRAPH GraphNode::graphFromMatrix(int** matrix, int size)
 	{
 		for (int j = 0; j < size; j++)
 		{
-			if (matrix[i][j] == 1)
+			if (matrix[i][j] != 0)
 			{
 				graph[i]->nodes.push_back(graph.at(j));
 			}
@@ -196,8 +197,9 @@ void GraphNode::printGraph(GRAPH graph)
 	}
 }
 
-void BFS(GRAPH graph)
+GRAPH BFS(GRAPH graph)
 {
+	GRAPH results;
 	queue<GraphNode*> Q;
 	graph[0]->marked = true;
 	Q.push(graph[0]);
@@ -206,6 +208,7 @@ void BFS(GRAPH graph)
 	{
 		GraphNode* node = Q.front();
 		Q.pop();
+		results.push_back(node);
 		cout << node->value << " ";
 		for (const auto &n : node->nodes)
 		{
@@ -216,6 +219,7 @@ void BFS(GRAPH graph)
 			}
 		}
 	}
+	return results;
 }
 
 void DFS(GraphNode* current)
@@ -228,6 +232,82 @@ void DFS(GraphNode* current)
 	for (const auto& node : current->nodes)
 	{
 		DFS(node);
+	}
+}
+
+int getMinDist(GRAPH nodes)
+{
+	int min = INFINITE;
+	int index = -1;
+	int i = 0;
+
+	for (const auto& el : nodes)
+	{
+		if (el->distance < min)
+		{
+			min = el->distance;
+			index = i;
+		}
+		i++;
+	}
+	return index;
+}
+
+int dist(int** matrix, GraphNode* nodeA, GraphNode* nodeB)
+{
+	int dist = nodeA->distance;
+	int i = nodeA->value;
+	int j = nodeB->value;
+	dist += matrix[i][j];
+	return dist;
+}
+
+void Dijkstra(GRAPH graph, GraphNode* source, int** matrix)
+{
+	// A fake queue because we can't iterate on a real one :( 
+	vector<GraphNode*> Q = BFS(graph);
+	source->distance = 0;
+
+	while (!Q.empty())
+	{
+		int index = getMinDist(Q);
+		GraphNode* node = Q.at(index);
+		node->marked = false;
+		Q.erase(Q.begin() + index);
+
+		for (int j = 0; j < node->nodes.size(); j++)
+		{
+			GraphNode* curr = node->nodes.at(j);
+			if (curr->marked == false) continue;
+			int newDist = dist(matrix, node, curr);
+			if (newDist < curr->distance)
+			{
+				curr->distance = newDist;
+				curr->previous = node;
+			}
+		}
+	}
+}
+
+void shortestPath(GraphNode* source, GraphNode* destination)
+{
+	stack<int> stack;
+	GraphNode* current = destination;
+	if (destination->previous != NULL)
+	{
+		while (current != NULL)
+		{
+			stack.push(current->value);
+			current = current->previous;
+		}
+	}
+
+	cout << endl;
+	
+	while (!stack.empty())
+	{
+		cout << stack.top() << " -> ";
+		stack.pop();
 	}
 }
 
@@ -280,11 +360,23 @@ void testDFS(GraphNode graph)
 	DFS(adjGraph[0]);
 }
 
+void testDijkstra(GraphNode source)
+{
+	int size = 0;
+	int** matrix = source.readMatrix(&size);
+	GRAPH matrixGraph = source.graphFromMatrix(matrix, size);
+	cout << "Graph from matrix: " << endl;
+	source.printGraph(matrixGraph);
+	cout << endl;
+	Dijkstra(matrixGraph, matrixGraph[0], matrix);
+	shortestPath(matrixGraph.front(), matrixGraph.back());
+}
+
 void test()
 {
 	GraphNode graph;
 
-	testDFS(graph);
+	testDijkstra(graph);
 }
 
 int main()

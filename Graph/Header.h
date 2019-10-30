@@ -7,6 +7,9 @@
 
 using namespace std;
 
+#define INFINITE 9999
+#define UNDEFINED 0
+
 class GraphNode;
 
 typedef vector<GraphNode*> GRAPH;
@@ -17,6 +20,8 @@ public:
 	int value;
 	bool marked = false;
 	vector<GraphNode*> nodes;
+	int distance = INFINITE;
+	GraphNode* previous = nullptr;
 
 	GraphNode()
 	{
