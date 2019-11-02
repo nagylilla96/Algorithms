@@ -1,6 +1,8 @@
 #include <iostream>
 #include <list>
 #include <random>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -25,6 +27,7 @@ class Table
 {
 	Node* table[TABLE_SIZE];
 	int size = 0;
+	fstream f;
 
 public:
 
@@ -34,6 +37,12 @@ public:
 		{
 			table[i] = NULL;
 		}
+		f.open("log.txt");
+	}
+
+	~Table()
+	{
+		f.close();
 	}
 
 	int hashFunc(int k)
@@ -53,6 +62,7 @@ public:
 		}
 		table[node->key]->nodes.push_front(value);
 		this->size++;
+		return node->key;
 	}
 
 	int searchValue(int value)
@@ -80,10 +90,12 @@ public:
 			if (tableList.empty())
 			{
 				table[key] = NULL;
+				this->size--;
 				return value;
 			}
 			table[key]->value = tableList.front();
 			tableList.pop_front();
+			this->size--;
 			return value;
 		}
 		int i = 0;
@@ -94,10 +106,17 @@ public:
 				list<int>::iterator it = tableList.begin();
 				advance(it, i);
 				tableList.erase(it);
+				this->size--;
 				return value;
 			}
 			i++;
 		}
+		return -1;
+	}
+
+	void writeToLogs(string str)
+	{
+		this->f << str << endl;
 	}
 
 	int getSize()
@@ -120,6 +139,8 @@ void test()
 	cout << hash_table->searchValue(5) << endl;
 	cout << hash_table->searchValue(4) << endl;
 	cout << hash_table->searchValue(7) << endl;
+	hash_table->deleteValue(3);
+	cout << hash_table->searchValue(3) << endl;
 }
 
 // Test adding 900 elements to the hash table
@@ -133,9 +154,27 @@ void stressTest()
 	uniform_int_distribution<mt19937::result_type> distSpec(1, 1000);
 	for (int i = 0; i < 900; i++)
 	{
-		table->addValue(distSpec(rng));
+		table->writeToLogs("Added value " + to_string(table->addValue(distSpec(rng))));
 	}
-	cout << "This table has " << table->getSize() << " elements" << endl;
+	string str = "This table has ";
+	str.append(to_string(table->getSize()));
+	str.append(" elements");
+	table->writeToLogs(str);
+	int notFound = 0;
+	for (int i = 0; i < 450; i++)
+	{
+		int val = distSpec(rng);
+		if (table->deleteValue(val) == -1) {
+			notFound++;
+			table->writeToLogs(to_string(val) + " couldn't be deleted");
+		}
+		else 
+		{
+			table->writeToLogs("Successfully deleted " + to_string(val));
+		}
+	}
+	table->writeToLogs("Deleted: " + to_string(450 - notFound));
+	table->writeToLogs("This table has " + to_string(table->getSize()) + " elements");
 }
 
 int main()
