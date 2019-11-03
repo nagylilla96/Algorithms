@@ -27,6 +27,18 @@ Node* succ(Node* root)
 	return curr;
 }
 
+Node* pred(Node* root)
+{
+	Node* curr = root;
+
+	while (curr && curr->right != NULL)
+	{
+		curr = curr->right;
+	}
+
+	return curr;
+}
+
 Node* addNode(Node* root, int value)
 {
 	if (root == NULL) return new Node(value);
