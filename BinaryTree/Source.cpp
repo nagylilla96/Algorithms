@@ -19,7 +19,7 @@ Node* succ(Node* root)
 {
 	Node* curr = root;
 
-	while (curr && curr->left != NULL)
+	while (curr && curr->right != NULL)
 	{
 		curr = curr->left;
 	}
@@ -31,7 +31,7 @@ Node* pred(Node* root)
 {
 	Node* curr = root;
 
-	while (curr && curr->right != NULL)
+	while (curr && curr->left != NULL)
 	{
 		curr = curr->right;
 	}
