@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -133,6 +134,169 @@ void insert(Tree* t, Node* z) {
 	fixup(t, z);
 }
 
+void transplant(Tree* t, Node* u, Node* v) {
+	if (u->parent == t->nil) t->root = v;
+	else if (u == u->parent->left) u->parent->left = v;
+	else u->parent->right = v;
+	
+	v->parent = u->parent;
+}
+
+Node* minimum(Node* root) {
+	Node* curr = root;
+
+	while (curr->left != NULL) {
+		curr = curr->left;
+	}
+
+	return curr;
+}
+
+void deleteFixup(Tree* t, Node* x) {
+	Node* w;
+
+	while (x != t->root && !x->red) {
+		if (x == x->parent->left) {
+			w = x->parent->right;
+
+			if (w->red) {
+				w->red = false;
+				x->parent->red = true;
+				leftRotate(t, x->parent);
+				w = x->parent->right;
+			}
+
+			if (!w->left->red && !w->right->red) {
+				w->red = true;
+				x = x->parent;
+			}
+			else {
+				if (!w->right->red) {
+					w->left->red = false;
+					w->red = true;
+					rightRotate(t, w);
+					w = x->parent->right;
+				}
+
+				w->red = x->parent->red;
+				x->parent->red = false;
+				w->right->red = false;
+				leftRotate(t, x->parent);
+				x = t->root;
+			}
+		}
+		else {
+			w = x->parent->left;
+
+			if (w->red) {
+				w->red = false;
+				w->parent->red = true;
+				rightRotate(t, x->parent);
+				w = x->parent->left;
+			}
+
+			if (!w->right->red && !w->left->red) {
+				w->red = true;
+				x = x->parent;
+			}
+			else {
+				if (!w->left->red) {
+					w->right->red = false;
+					w->red = true;
+					leftRotate(t, w);
+					w = x->parent->left;
+				}
+
+				x->red = x->parent->red;
+				x->parent->red = false;
+				x->left->red = false;
+				rightRotate(t, x->parent);
+				x = t->root;
+			}
+		}
+	}
+	x->red = false;
+}
+
+void delet(Tree* t, Node* z) {
+	Node* y = z;
+	Node* x;
+	bool origRed = y->red;
+	if (z->left == t->nil) {
+		x = z->right;
+		transplant(t, z, z->right);
+	}
+	else if (z->right == t->nil) {
+		x = z->left;
+		transplant(t, z, z->left);
+	}
+	else {
+		y = minimum(z->right);
+		origRed = y->red;
+		x = y->right;
+
+		if (y->parent == z) x->parent = y;
+		else {
+			transplant(t, y, y->right);
+			y->right = z->right;
+			y->right->parent = y;
+		}
+		
+		transplant(t, z, y);
+		y->left = z->left;
+		y->left->parent = y;
+		y->red = z->red;
+	}
+
+	if (!origRed) {
+		deleteFixup(t, x);
+	}
+}
+
+void prettyPrint(Node* root, int level) {
+	if (root == NULL) return;
+
+	prettyPrint(root->right, level + 1);
+
+	for (int i = 0; i < level; i++)
+	{
+		cout << "   ";
+	}
+
+	if (root->red) cout << root->value << endl;
+	else cout << "|" << root->value << "|" << endl;
+
+	prettyPrint(root->left, level + 1);
+}
+
+void print(Node* root) {
+	cout << "----------------------------------" << endl;
+	prettyPrint(root, 0);
+	cout << endl;
+}
+
+void test() {
+	Tree* tree = new Tree();
+	vector<Node*> nodes;
+
+	for (int i = 1; i <= 9; i++) {
+		Node* n = new Node(i);
+		nodes.push_back(n);
+		insert(tree, n);
+		print(tree->root);
+	}
+
+	for (int i = 5; i <= 9; i++) {
+		delet(tree, nodes[i - 1]);
+		cout << "deleting node " << i << endl;
+		print(tree->root);
+	}
+
+	delete tree;
+}
+
 int main() {
+	test();
+
 	return 0;
 }
