@@ -8,10 +8,19 @@ public:
 	int value;
 	Node* left = NULL;
 	Node* right = NULL;
+	int size = 1;
+	int rank;
 
 	Node(int val)
 	{
 		value = val;
+	}
+
+	void updateSize() {
+		int s = 0;
+		if (left) s += left->size;
+		if (right) s += right->size;
+		size = s + 1;
 	}
 };
 
@@ -46,11 +55,13 @@ Node* addNode(Node* root, int value)
 	if (value < root->value)
 	{
 		root->left = addNode(root->left, value);
+		root->updateSize();
 
 		return root;
 	}
 
 	root->right = addNode(root->right, value);
+	root->updateSize();
 
 	return root;
 }
@@ -90,6 +101,8 @@ Node* deleteNode(Node* root, int value)
 		root->value = temp->value;
 		root->right = deleteNode(root->right, temp->value);
 	}
+	root->updateSize();
+
 
 	return root;
 }
@@ -132,7 +145,7 @@ void printTree(Node* root, int level)
 		cout << "   ";
 	}
 
-	cout << root->value << endl;
+	cout << root->value << "(" << root->size << ")" << endl;
 
 	printTree(root->left, level + 1);
 }
