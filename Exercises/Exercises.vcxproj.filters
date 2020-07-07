@@ -25,6 +25,12 @@
     <Filter Include="Header Files\2. Linked Lists">
       <UniqueIdentifier>{6c2bdde5-14e6-4e70-813f-23774a846bd6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3. Stacks and Queues">
+      <UniqueIdentifier>{69852e4b-77a4-4844-8183-500ded5eb102}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\3. Stacks and Queues">
+      <UniqueIdentifier>{89eeeb79-4d7b-4ea0-8300-a4adcc2b2db6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -36,6 +42,9 @@
     <ClCompile Include="2ex1.cpp">
       <Filter>Source Files\2. Linked Lists</Filter>
     </ClCompile>
+    <ClCompile Include="3ex1.cpp">
+      <Filter>Source Files\3. Stacks and Queues</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="1exercises.hpp">
@@ -43,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="2exercises.h">
       <Filter>Header Files\2. Linked Lists</Filter>
+    </ClInclude>
+    <ClInclude Include="3exercises.h">
+      <Filter>Header Files\3. Stacks and Queues</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
